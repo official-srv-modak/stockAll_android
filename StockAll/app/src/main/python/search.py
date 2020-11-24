@@ -66,9 +66,11 @@ def get_nifty_companies():
             break
         tuple_cnt += 1"""
     list_of_companies = ""
+    table[0][0] += "S.No"
     for row in table:
         for tuple in row:
-            list_of_companies += tuple + "\t"
+            if tuple:
+                list_of_companies += tuple + " SPACE "
         list_of_companies += " NEXTLINE "
     # print(list_of_companies)
 

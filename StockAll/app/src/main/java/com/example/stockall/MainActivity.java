@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void displayNiftyCompanies(PyObject pyInput, String niftyCompanyFile)
     {
-        //deleteFileFromPhone(niftyCompanyFile);
+        deleteFileFromPhone(niftyCompanyFile);
         List<String> outputFromFile = readFromFile(niftyCompanyFile);
         if(outputFromFile.size()>0)
         {
@@ -239,7 +239,7 @@ public class MainActivity extends AppCompatActivity {
 
             writeToFile(niftyCompanyFile, output);
             Intent myIntent = new Intent(this, NiftyCompanies.class);
-            //myIntent.putExtra("outputList", output);
+            myIntent.putExtra("outputList", output);
             this.startActivity(myIntent);
         }
     }
