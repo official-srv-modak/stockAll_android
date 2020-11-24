@@ -14,6 +14,7 @@ from datetime import date
 from html_table_parser import *
 
 nifty_file = "nifty_companies.txt"
+
 def get_table_data(URL):
     """ This is to get the tabular data from the websites"""
 
@@ -60,13 +61,13 @@ def get_nifty_companies():
 
     table = get_companies_table("nifty companies")
     tuple_cnt = 0
-    for tuple in table[0]:
+    """for tuple in table[0]:
         if re.search("name", tuple) or re.search("NAME", tuple) or re.search("Name", tuple):
             break
-        tuple_cnt += 1
+        tuple_cnt += 1"""
     list_of_companies = ""
-    for row in table[1:]:
-        list_of_companies += str(row[tuple_cnt]) + " NEXTLINE "
+    for row in table:
+        list_of_companies += str(row) + " NEXTLINE "
     # print(list_of_companies)
 
     return list_of_companies

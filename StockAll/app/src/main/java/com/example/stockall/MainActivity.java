@@ -83,8 +83,6 @@ public class MainActivity extends AppCompatActivity {
 
         String output [] = getOutputInList(pyOutput.toString());
 
-
-
         for(int i = 0; i<output.length; i++)
         {
             /*String url = "http://google.com/";
@@ -188,8 +186,15 @@ public class MainActivity extends AppCompatActivity {
         return output;
     }
 
+    public static void deleteFileFromPhone(String file_path)
+    {
+        File file = new File(file_path);
+        if(file.exists())
+            file.delete();
+    }
     public void displayNiftyCompanies(PyObject pyInput, String niftyCompanyFile)
     {
+        deleteFileFromPhone(niftyCompanyFile);
         List<String> outputFromFile = readFromFile(niftyCompanyFile);
         if(outputFromFile.size()>0)
         {
