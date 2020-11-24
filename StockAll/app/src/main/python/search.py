@@ -60,14 +60,16 @@ def get_nifty_companies():
     """ Return the list of all the nifty companies"""
 
     table = get_companies_table("nifty companies")
-    tuple_cnt = 0
+    #tuple_cnt = 0
     """for tuple in table[0]:
         if re.search("name", tuple) or re.search("NAME", tuple) or re.search("Name", tuple):
             break
         tuple_cnt += 1"""
     list_of_companies = ""
     for row in table:
-        list_of_companies += str(row) + " NEXTLINE "
+        for tuple in row:
+            list_of_companies += tuple + "\t"
+        list_of_companies += " NEXTLINE "
     # print(list_of_companies)
 
     return list_of_companies
