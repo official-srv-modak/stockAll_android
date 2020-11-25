@@ -6,11 +6,16 @@ import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.VideoView;
 
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
@@ -20,9 +25,12 @@ import java.io.File;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Array;
+import java.net.URI;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 
 
@@ -33,11 +41,24 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static Drawable LoadImageFromWebOperations(String url) {
+        try {
+            InputStream is = (InputStream) new URL(url).getContent();
+            Drawable d = Drawable.createFromStream(is, "src name");
+            return d;
+        } catch (Exception e) {
+            return null;
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //-------------------------------------------------------------------------------
+        //Intialise
+        //-------------------------------------------------------------------------------
 
         String niftyCompanyFile = getApplicationContext().getFilesDir().getAbsolutePath() + "/nifty_companies.txt";
 
@@ -49,7 +70,34 @@ public class MainActivity extends AppCompatActivity {
 
         EditText companyName = findViewById(R.id.companyNameText);
 
+        ImageView imageView = findViewById(R.id.imageView);
 
+        //-------------------------------------------------------------------------------
+        //Action
+        //-------------------------------------------------------------------------------
+
+        imageView.setBackground(LoadImageFromWebOperations("https://img.youtube.com/vi/Xn7KWR9EOGQ/hqdefault.jpg"));
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(
+                        Intent.ACTION_VIEW ,
+                        Uri.parse("https://youtu.be/Xn7KWR9EOGQ"));
+                intent.setComponent(new ComponentName("com.google.android.youtube","com.google.android.youtube.PlayerActivity"));
+
+                PackageManager manager = getPackageManager();
+                List<ResolveInfo> infos = manager.queryIntentActivities(intent, 0);
+                if (infos.size() > 0) {
+                    startActivity(intent);
+                }else{
+                    //No Application can handle your intent
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://youtu.be/Xn7KWR9EOGQ"));
+                    startActivity(browserIntent);
+                }
+
+            }
+        });
         Button companyNameButton = findViewById(R.id.goBtn);
         companyNameButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,25 +133,6 @@ public class MainActivity extends AppCompatActivity {
 
         for(int i = 0; i<output.length; i++)
         {
-            /*String url = "http://google.com/";
-            Intent intent = new Intent(Intent.ACTION_MAIN, null);
-            intent.addCategory(Intent.CATEGORY_LAUNCHER);
-            intent.setComponent(new ComponentName("org.mozilla.firefox", "org.mozilla.firefox.App"));
-            intent.setAction("org.mozilla.gecko.BOOKMARK");
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra("args", "--url=" + url);
-            intent.setData(Uri.parse(url));
-            startActivity(intent);*/
-            /*try{
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("google.com"));
-                intent.setComponent(new ComponentName("org.mozilla.firefox", "org.mozilla.firefox.App"));
-                this.startActivity(intent);
-
-            }catch(Exception e)
-            {
-                System.out.println(e.getMessage());
-            }*/
-
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(output[i]));
             startActivity(browserIntent);
 
