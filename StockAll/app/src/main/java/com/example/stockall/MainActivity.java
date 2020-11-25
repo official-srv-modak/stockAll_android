@@ -7,6 +7,8 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -72,6 +74,21 @@ public class MainActivity extends AppCompatActivity {
 
         ImageView imageView = findViewById(R.id.imageView);
 
+        ImageView invest = findViewById(R.id.invest);
+
+        try{
+
+
+            URL url = new URL("https://zerodha.com/static/images/logo.svg");
+            Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+            invest.setImageBitmap(bmp);
+
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+
         //-------------------------------------------------------------------------------
         //Action
         //-------------------------------------------------------------------------------
@@ -96,6 +113,13 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(browserIntent);
                 }
 
+            }
+        });
+        invest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://zerodha.com/"));
+                startActivity(browserIntent);
             }
         });
         Button companyNameButton = findViewById(R.id.goBtn);
