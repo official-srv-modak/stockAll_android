@@ -157,8 +157,14 @@ public class MainActivity extends AppCompatActivity {
 
         for(int i = 0; i<output.length; i++)
         {
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(output[i]));
-            startActivity(browserIntent);
+            try{
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(output[i]));
+                startActivity(browserIntent);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
 
         }
     }
@@ -283,6 +289,38 @@ public class MainActivity extends AppCompatActivity {
                 {
                     e.printStackTrace();
                 }
+            }
+            else
+            {
+                try {
+
+                    Date d1 = formatter.parse(dateStr1);
+                    Date d2 = formatter.parse(dateStr2);
+                    long difference_In_Time = d2.getTime() - d1.getTime();
+                    long difference_In_Days = (difference_In_Time/ (1000 * 60 * 60 * 24))% 365;
+                    if (difference_In_Days != 0)
+                    {
+                        PyObject pyOutput = pyInput.callAttr("get_nifty_companies");
+                        String output [] = getOutputInList(pyOutput.toString());
+
+                        writeToFile(niftyCompanyFile, output);
+                        Intent myIntent = new Intent(this, NiftyCompanies.class);
+                        myIntent.putExtra("outputList", output);
+                        this.startActivity(myIntent);
+                    }
+                    else
+                    {
+                        String output [] = getOutputInList(outputFromFile.get(1));
+                        Intent myIntent = new Intent(this, NiftyCompanies.class);
+                        myIntent.putExtra("outputList", output);
+                        this.startActivity(myIntent);
+                    }
+
+                }catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
+
             }
         }
         else
